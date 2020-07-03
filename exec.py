@@ -126,30 +126,34 @@ def main():
     #searchFile(10,"name contains 'Getting'")
     #listFiles(100)
 
+    class Handler:
+        def on_upload_clicked(self, *args):
+            print("Uploading files")
+            #uploadFile('icon.png','icon.png','image/png')
+
+        def on_download_clicked(self, *args):
+            print("Downloading files")
+            #downloadFile('1Knxs5kRAMnoH5fivGeNsdrj_SIgLiqzV','google.jpg')
+
+        def on_list_clicked(self, *args):
+            print("List files")
+            listFiles(100)
+        
+    builder = Gtk.Builder()
+    builder.connect_signals(Handler())
+    builder.add_from_file("google_client.glade")
+    builder.add_objects_from_file("google_client.glade", ("upload", "download"))
+
+    window = builder.get_object("global_window")
+    window.show_all()
+    window.connect("destroy", Gtk.main_quit)
+    Gtk.main()
 
 if __name__ == '__main__':
     main()
 
-class Handler:
-    def on_upload_clicked(self, *args):
-        print("Uploading files")
-        #uploadFile('icon.png','icon.png','image/png')
-
-    def on_download_clicked(self, *args):
-        print("Downloading files")
-        #downloadFile('1Knxs5kRAMnoH5fivGeNsdrj_SIgLiqzV','google.jpg')
-
-    def on_list_clicked(self, *args):
-        print("List files")
-        #listFiles(100)
 
     
-builder = Gtk.Builder()
-builder.add_from_file("google_client.glade")
-builder.add_objects_from_file("google_client.glade", ("upload", "download"))
 
 
-window = builder.get_object("global_window")
-window.show_all()
-window.connect("destroy", Gtk.main_quit)
-Gtk.main()
+
