@@ -132,8 +132,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="sync">
-                <property name="label" translatable="yes">Synchronise</property>
+              <object class="GtkButton" id="list">
+                <property name="label" translatable="yes">Load Files</property>
                 <property name="name">sync</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

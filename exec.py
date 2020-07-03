@@ -9,9 +9,22 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from google.protobuf import service
 import io
+import gi
+
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from google_auth_oauthlib import flow
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+
+# We import the Gtk module. The require_version() method ensures the namespace 
+# gets loaded with the given version. The gi.repository is the Python module 
+# for PyGObject. PyGObject (Python GObject introspection) contains Python bindings 
+# and support for gobject, glib, gtk and other Gnome libraries.
+
+#To succesful run your program, install pyGobject package using any package installer.
+#Have you tried jhbuild
 
 def main():
     """Shows basic usage of the Drive v3 API.
@@ -104,6 +117,7 @@ def main():
             for item in items:
                 print(item)
                 print('{0} ({1})'.format(item['name'], item['id']))
+    
                 
     #Function calling
     #uploadFile('icon.png','icon.png','image/png')
@@ -112,5 +126,30 @@ def main():
     #searchFile(10,"name contains 'Getting'")
     #listFiles(100)
 
+
 if __name__ == '__main__':
     main()
+
+class Handler:
+    def on_upload_clicked(self, *args):
+        print("Uploading files")
+        #uploadFile('icon.png','icon.png','image/png')
+
+    def on_download_clicked(self, *args):
+        print("Downloading files")
+        #downloadFile('1Knxs5kRAMnoH5fivGeNsdrj_SIgLiqzV','google.jpg')
+
+    def on_list_clicked(self, *args):
+        print("List files")
+        #listFiles(100)
+
+    
+builder = Gtk.Builder()
+builder.add_from_file("google_client.glade")
+builder.add_objects_from_file("google_client.glade", ("upload", "download"))
+
+
+window = builder.get_object("global_window")
+window.show_all()
+window.connect("destroy", Gtk.main_quit)
+Gtk.main()
