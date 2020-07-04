@@ -1,15 +1,16 @@
 from __future__ import print_function #Necessary if you are working in Python2 or older
 import pickle
 import os.path 
-
+import io
+import gi
 
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from google.protobuf import service
-import io
-import gi
+from gi.repository import GObject
+
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -57,6 +58,16 @@ def main():
     service = build('drive', 'v3', credentials=creds) #We are using V3 API
 
     # Call the Drive v3 API and list files, you can specify the number of files to be loaded
+
+
+    builder = Gtk.Builder()
+    builder.add_from_file("google_client.glade")
+    #builder.add_objects_from_file("google_client.glade", ("upload", "download"))
+
+    window = builder.get_object("global_window")
+    window.show_all()
+    window.connect("destroy", Gtk.main_quit)
+    Gtk.main()
 
     #Listing files
     def listFiles(size):
@@ -127,22 +138,23 @@ def main():
     #listFiles(100)
 
     class Handler:
-        def on_upload_clicked(self, *args):
+        def on_upload_clicked(self, button):
             print("Uploading files")
             #uploadFile('icon.png','icon.png','image/png')
 
-        def on_download_clicked(self, *args):
+        def on_download_clicked(self, button):
             print("Downloading files")
             #downloadFile('1Knxs5kRAMnoH5fivGeNsdrj_SIgLiqzV','google.jpg')
 
-        def on_list_clicked(self, *args):
+        def on_list_clicked(self, button):
+            label = Gtk.Label(label="Hello World", angle=25, halign=Gtk.Align.END)
             print("List files")
             listFiles(100)
         
-    builder = Gtk.Builder()
+    # builder = Gtk.Builder()
     builder.connect_signals(Handler())
-    builder.add_from_file("google_client.glade")
-    builder.add_objects_from_file("google_client.glade", ("upload", "download"))
+    # builder.add_from_file("google_client.glade")
+    # #builder.add_objects_from_file("google_client.glade", ("upload", "download"))
 
     window = builder.get_object("global_window")
     window.show_all()
