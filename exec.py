@@ -1,7 +1,7 @@
 from __future__ import print_function #Necessary if you are working in Python2 or older
 import pickle
 import os.path 
-import io
+#import io
 import gi
 
 gi.require_version('Pango', '1.0')
@@ -22,7 +22,9 @@ from gi.repository import Gtk
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
 # We import the Gtk module. The require_version() method ensures the namespace 
-# gets loaded with the given version. The gi.repository is the Python module 
+# gets loaded with the given version. 
+# 
+# The gi.repository is the Python module 
 # for PyGObject. PyGObject (Python GObject introspection) contains Python bindings 
 # and support for gobject, glib, gtk and other Gnome libraries.
 
@@ -33,6 +35,7 @@ class main():
     def __init__(self):
         """Shows basic usage of the Drive v3 API.
         Prints the names and ids of the files the user has access to.
+        The Upload, download and create files on the drive
         """
 
         self.builder = Gtk.Builder()
@@ -53,7 +56,8 @@ class main():
         window.show_all()
         Gtk.main()
 
-        #builder.add_objects_from_file("google_client.glade", ("upload", "download"))
+
+        #Drive API AUTHENTICATION
         creds = None
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
@@ -79,50 +83,15 @@ class main():
                 pickle.dump(creds, token)
 
         service = build('drive', 'v3', credentials=creds) #We are using V3 API
-        
-        # Call the Drive v3 API and list files, you can specify the number of files to be loaded
-
-        # columns = ["File name",
-        #     "Type"
-        #     ]
-        # file_list = [
-        #     ["File one", "Type"],
-        #     ["File two", "Type"],
-        #     ["File three", "Type"],
-        #     ["File four", "Type"],
-        #     ["File five", "Type"]
-        # ]
-        
-        # the data in the model (two strings for each row, one for each
-            # column)
-        # listmodel = Gtk.ListStore(str, str)
-        # # append the values in the model
-        # for i in range(len(file_list)):
-        #     listmodel.append(columns[i])
-
-        # view = Gtk.TreeView(model=listmodel)
-        # for i, column in enumerate(columns):
-        #         # cellrenderer to render the text
-        #         cell = Gtk.CellRendererText()
-        #         # the text in the first column should be in boldface
-        #         if i == 0:
-        #             cell.props.weight_set = True
-        #             cell.props.weight = Pango.Weight.BOLD
-        #         # the column is created
-        #         col = Gtk.TreeViewColumn(column, cell, text=i)
-        #         # and it is appended to the treeview
-        #         view.append_column(col)
-
-        # when a row is selected, it emits a signal
-        #view.get_selection().connect("changed", self.on_changed)
 
         # the label we use to show the selection
         label = Gtk.Label()
         label.set_text("")
 
+        #Trying handlers approach
         handlers = {
-            # "on_list_clicked": listFiles,
-            # "on_men_destroy": Gtk.main_quit
+            "on_list_clicked": listFiles(10),
+            "on_men_destroy": Gtk.main_quit
         }
 
         
@@ -176,6 +145,7 @@ class main():
             file = service.files().create(body=file_metadata,
         fields='id').execute()
             print ('Folder ID: %s' % file.get('id'))
+        #createFolder("Lunodzo")
 
         #Search query (Within directory)
         def searchFile(size,query):
@@ -189,12 +159,12 @@ class main():
                 for item in items:
                     print(item)
                     print('{0} ({1})'.format(item['name'], item['id']))
+        #searchFile(10,"name contains 'Getting'")
+
+
 if __name__ == '__main__':
     main()   
       
-    def list(self, widget):
-            pass
-
     def loadPaths(self):
         pathsStr = os.getenv("PATH")   
         paths = pathsStr.split(":")     
@@ -227,9 +197,7 @@ if __name__ == '__main__':
         #     label = Gtk.Label(label="Hello World", angle=25, halign=Gtk.Align.END)
         #     print("List files")
         #     listFiles(100)
-        #uploadFile('icon.png','icon.png','image/png')
-                 
-    
+        #uploadFile('icon.png','icon.png','image/png')    
 main()
 
 
